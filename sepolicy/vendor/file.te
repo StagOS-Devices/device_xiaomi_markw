@@ -26,8 +26,8 @@ type proc_touchpanel, fs_type, sysfs_type, proc_type;
 # led:torch_0/max_brightness
 type sysfs_torch, fs_type, sysfs_type;
 
-# Touchscreen
-type proc_touchpanel, fs_type, sysfs_type, proc_type;
-
 # XiaomiParts kcal
 type sysfs_kcal, fs_type, sysfs_type;
+
+# Sound Control
+type sysfs_sound_control, fs_type, sysfs_type;

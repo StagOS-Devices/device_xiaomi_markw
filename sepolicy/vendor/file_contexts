@@ -44,3 +44,6 @@
 /sys/audio_amplifier/enable							u:object_r:sysfs:s0
 /proc/gesture/onoff								u:object_r:proc:s0
 /firmware/verinfo/ver_info.txt							u:object_r:vfat:s0
+
+# Sound Control
+/sys/kernel/sound_control(/.*)?              u:object_r:sysfs_sound_control:s0

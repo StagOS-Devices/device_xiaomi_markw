@@ -52,4 +52,12 @@
     <string name="extreme_amoled">Extreme Amoled</string>
     <string name="warm_amoled">Warm Amoled</string>
     <string name="hybrid_mamba">Hybrid Mamba</string>
+
+    <!-- Sound Control -->
+    <string name="sound_title">Sound</string>
+    <string name="sound_control_title">Sound control</string>
+    <string name="sound_control_summary">Setup headphones, speaker and microphone gains</string>
+    <string name="headphone_gain">Headphone gain</string>
+    <string name="speaker_gain">Speaker gain</string>
+    <string name="mic_gain">Microphone gain</string>
 </resources>
