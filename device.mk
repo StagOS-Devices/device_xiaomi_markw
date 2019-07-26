@@ -167,7 +167,6 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 
 # Device-specific settings
 PRODUCT_PACKAGES += \
-    XiaomiParts \
     XiaomiTools
 
 # Display
