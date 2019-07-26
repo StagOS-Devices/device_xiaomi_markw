@@ -37,6 +37,9 @@ PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_DEVICE := markw
 PRODUCT_MODEL := Redmi 4 Prime
 
+# StagOS Official
+STAG_BUILD_TYPE := Official
+
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
