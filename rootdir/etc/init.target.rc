@@ -147,7 +147,7 @@ on boot
     chown system system /mnt/vendor/persist/speccfg/partition
 
 service wcnss-service /vendor/bin/wcnss_service
-    class main
+    class late_start
     user system
     group system wifi radio
     oneshot
@@ -174,6 +174,7 @@ service vendor.ims_rtp_daemon /vendor/bin/ims_rtp_daemon
    class main
    user system
    group radio diag inet log
+   writepid /dev/cpuset/system-background/tasks
 
 service vendor.imsrcsservice /vendor/bin/imsrcsd
    class main
@@ -216,10 +217,11 @@ on charger
     mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
     start vendor.hvdcp_opti
 
-service adsprpcd /vendor/bin/adsprpcd
+service energy-awareness /vendor/bin/energy-awareness
     class main
-    user media
-    group media
+    user root
+    group system
+    oneshot
 
 service vendor.hvdcp_opti /vendor/bin/hvdcp_opti
    class main
@@ -242,7 +244,11 @@ on property:init.svc.vendor.per_mgr=running
 
 on property:sys.shutdown.requested=*
     stop vendor.per_proxy
+    stop vendor.ims_rtp_daemon
 
 on boot
     #Ignore modem crash
     write /sys/bus/msm_subsys/devices/subsys4/restart_level related
+
+# access permission for wlan
+    chown system system /mnt/vendor/persist/WCNSS_qcom_wlan_nv.bin
