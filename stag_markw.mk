@@ -38,7 +38,7 @@ PRODUCT_DEVICE := markw
 PRODUCT_MODEL := Redmi 4 Prime
 
 # StagOS Official
-BUILD_TYPE := Official
+BUILD_TYPE := OFFICIAL
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
