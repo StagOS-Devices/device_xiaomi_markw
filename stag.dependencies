@@ -1,0 +1,14 @@
+[
+  {
+    "remote": "github",
+    "repository": "ShihabZzz/proprietary_vendor_xiaomi_markw",
+    "target_path": "vendor/xiaomi",
+    "branch": "pie"
+  },
+  {
+    "remote": "github",
+    "repository": "DarkAngelGR/olympian_kernel",
+    "target_path": "kernel/xiaomi/markw",
+    "branch": "Zeus"
+  }
+]
