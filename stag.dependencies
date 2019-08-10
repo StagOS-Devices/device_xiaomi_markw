@@ -1,14 +1,14 @@
 [
   {
     "remote": "github",
-    "repository": "ShihabZzz/proprietary_vendor_xiaomi_markw",
+    "repository": "StagOS-Devices/vendor_xiaomi_markw",
     "target_path": "vendor/xiaomi",
-    "branch": "pie"
+    "branch": "p9"
   },
   {
     "remote": "github",
-    "repository": "DarkAngelGR/olympian_kernel",
+    "repository": "StagOS-Devices/kernel_xiaomi_markw",
     "target_path": "kernel/xiaomi/markw",
-    "branch": "Zeus"
+    "branch": "p9"
   }
 ]
