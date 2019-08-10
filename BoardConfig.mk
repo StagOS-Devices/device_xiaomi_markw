@@ -18,9 +18,6 @@ DEVICE_PATH := device/xiaomi/markw
 
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
 
-# Compile libhwui in performance mode
-HWUI_COMPILE_FOR_PERF := true
-
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
@@ -41,22 +38,22 @@ TARGET_BOARD_SUFFIX := _64
 TARGET_USES_64_BIT_BINDER := true
 
 # Kernel
+TARGET_KERNEL_CONFIG := franco_markw_defconfig
+#TARGET_KERNEL_CONFIG := markw_defconfig
 BOARD_KERNEL_BASE := 0x80000000
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci firmware_class.path=/vendor/firmware_mnt/image earlycon=msm_hsl_uart,0x78af000
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci earlycon=msm_hsl_uart,0x78af000 firmware_class.path=/vendor/firmware_mnt/image
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE :=  2048
-BOARD_KERNEL_TAGS_OFFSET := 0x00000100
-BOARD_RAMDISK_OFFSET := 0x01000000
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset $(BOARD_RAMDISK_OFFSET) --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
 TARGET_COMPILE_WITH_MSM_KERNEL	:= true
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CONFIG := olympian_defconfig
-TARGET_KERNEL_SOURCE := kernel/xiaomi/markw
 TARGET_KERNEL_VERSION := 3.18
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+TARGET_KERNEL_SOURCE := kernel/xiaomi/markw
 
-# ANT+
+# ANT
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
 # Audio
@@ -87,12 +84,8 @@ USE_XML_AUDIO_POLICY_CONF := 1
 TARGET_USES_AOSP_FOR_AUDIO := true
 
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := msm8953
+TARGET_BOOTLOADER_BOARD_NAME := MSM8953
 TARGET_NO_BOOTLOADER := true
-
-# Bootanimation
-TARGET_BOOTANIMATION_PRELOAD := true
-TARGET_BOOTANIMATION_TEXTURE_CACHE := true
 
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
@@ -100,20 +93,20 @@ BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_BTNV := true
 
 # Camera
-USE_DEVICE_SPECIFIC_CAMERA := true
 BOARD_QTI_CAMERA_32BIT_ONLY := true
-TARGET_USES_QTI_CAMERA_DEVICE := true
 TARGET_TS_MAKEUP := true
-
-# disabel ir for kernel headers
-#BOARD_GLOBAL_CFLAGS += -DCONFIG_MSMB_WITHOUT_IR
+TARGET_USES_QTI_CAMERA_DEVICE := true
+USE_DEVICE_SPECIFIC_CAMERA := true
 
 # Charger
-BOARD_CHARGER_DISABLE_INIT_BLANK := true
 BOARD_CHARGER_ENABLE_SUSPEND := true
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
 # CNE / DPM
 BOARD_USES_QCNE := true
+
+# Crypto
+TARGET_HW_DISK_ENCRYPTION := true
 
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
@@ -126,81 +119,89 @@ ifeq ($(HOST_OS),linux)
       PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI
 endif
 
-# DRM
-TARGET_ENABLE_MEDIADRM_64 := true
+#DATA_IPA_CFG_MGR
+USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
 
 # Display
-BOARD_USES_ADRENO := true
-
+MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
-TARGET_USES_C2D_COMPOSITION := true
-TARGET_USES_HWC2 := true
-TARGET_USES_COLOR_METADATA := true
-TARGET_USES_GRALLOC1 := true
+
 TARGET_USES_ION := true
 TARGET_USES_NEW_ION_API :=true
+TARGET_USES_GRALLOC1 := true
+TARGET_USES_HWC2 := true
 TARGET_USES_OVERLAY := true
-USE_OPENGL_RENDERER := true
 
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
 
-MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
+OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
+USE_OPENGL_RENDERER := true
 
-OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
+# UI
+TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS :=  0x2000
 
-# Encryption
-TARGET_HW_DISK_ENCRYPTION := true
+# DRM
+TARGET_ENABLE_MEDIADRM_64 := true
+
+# Filesystem
+TARGET_USERIMAGES_USE_F2FS := true
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_ROOT_EXTRA_SYMLINKS := \
+    /vendor/dsp:/dsp \
+    /vendor/firmware_mnt:/firmware \
+    /mnt/vendor/persist:/persist
+TARGET_COPY_OUT_VENDOR := vendor
+TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
 
 #FM
 BOARD_HAVE_QCOM_FM := true
 
-# Filesystem
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-TARGET_USERIMAGES_USE_F2FS := true
-TARGET_USERIMAGES_USE_EXT4 := true
-BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
-TARGET_COPY_OUT_VENDOR := vendor
-
 # HIDL
-DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
-DEVICE_MATRIX_FILE   := $(DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/vendor_framework_compatibility_matrix.xml
 DEVICE_FRAMEWORK_MANIFEST_FILE := $(DEVICE_PATH)/framework_manifest.xml
+DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
+DEVICE_MATRIX_FILE   := $(DEVICE_PATH)/compatibility_matrix.xml
 
 # Init
 TARGET_INIT_VENDOR_LIB := libinit_markw
 TARGET_RECOVERY_DEVICE_MODULES := libinit_markw
 
-# Lockscreen real time charging current values
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
+
+# Lockscreen Real Time Charging Current Values
 BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
 
 # Media
 TARGET_USES_MEDIA_EXTENSIONS := true
 
 # Partitions
-BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 25765043200 # 25765059584 - 16384
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3221225472
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
-BOARD_ROOT_EXTRA_SYMLINKS := \
-    /mnt/vendor/persist:/persist \
-    /vendor/bt_firmware:/bt_firmware \
-    /vendor/dsp:/dsp \
-    /vendor/firmware_mnt:/firmware
+BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 25765043200 # 25765059584 - 16384
 BOARD_VENDORIMAGE_PARTITION_SIZE := 536870912 # /cust
 
-# Peripheral manager
+# Peripheral Manager
 TARGET_PER_MGR_ENABLED := true
 
 # Power
-TARGET_TAP_TO_WAKE_NODE := "/proc/gesture/onoff"
-TARGET_HAS_LEGACY_POWER_STATS := true
 TARGET_HAS_NO_WLAN_STATS := true
+TARGET_TAP_TO_WAKE_NODE := "/proc/gesture/onoff"
+TARGET_USES_INTERACTION_BOOST := true
+
+# Qualcomm
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_USE_SDCLANG := true
+
+# Recovery
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.recovery.qcom
 
 # RIL
 DISABLE_RILD_OEM_HOOK := true
@@ -208,14 +209,13 @@ TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 TARGET_RIL_VARIANT := caf
 TARGET_USES_OLD_MNC_FORMAT := true
 
-# QCOM support
-BOARD_USES_QCOM_HARDWARE := true
-
-# Recovery
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.recovery.qcom
+# Security patch level
+VENDOR_SECURITY_PATCH := 2019-08-01
 
 # Shims
-TARGET_LD_SHIM_LIBS := /vendor/lib64/hw/gxfingerprint.default.so|fakelogprint.so:/vendor/lib64/hw/fingerprint.goodix.so|fakelogprint.so:/vendor/bin/gx_fpd|fakelogprint.so
+TARGET_LD_SHIM_LIBS += \
+/vendor/bin/mm-qcamera-daemon|libshims_qcamera-daemon.so \
+/vendor/lib64/hw/gxfingerprint.default.so|fakelogprint.so:/vendor/lib64/hw/fingerprint.goodix.so|fakelogprint.so:/vendor/bin/gx_fpd|fakelogprint.so
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
@@ -225,17 +225,9 @@ BOARD_SEPOLICY_VERS := 28.0
 #SELINUX_IGNORE_NEVERALLOWS := true
 
 # Treble
-ENABLE_VENDOR_IMAGE := true
-PRODUCT_VENDOR_MOVE_ENABLED := true
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 PRODUCT_SHIPPING_API_LEVEL := 23
-
-# UI
-TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS :=  0x2000
-
-# Vendor Security patch level
-VENDOR_SECURITY_PATCH := 2019-07-05
 
 # Wi-Fi
 BOARD_HAS_QCOM_WLAN := true
@@ -248,7 +240,7 @@ TARGET_DISABLE_WCNSS_CONFIG_COPY := true
 WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_STA := "sta"
 WPA_SUPPLICANT_VERSION := VER_0_8_X
-WIFI_HIDL_FEATURE_AWARE := true
 
 # Inherit the proprietary files
 -include vendor/xiaomi/markw/BoardConfigVendor.mk
+-include vendor/xiaomi/msm8953-common/BoardConfigVendor.mk
